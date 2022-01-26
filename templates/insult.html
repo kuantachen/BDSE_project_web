@@ -1,0 +1,329 @@
+{% extends "base.html" %}
+{% block title %}刑法309條-量刑預測 | Judgement-Prediction{% endblock title %}
+{% block page_content %}
+<div class="container px-4 py-5">
+  <h2 class="page-section-heading text-center text-uppercase text-secondary mb-0">刑法309條-公然侮辱罪</h2>
+    <div class="row py-3 align-items-center">
+      <div class=".col-md-6 .offset-md-3">
+        <div class="card border border-4 border-warning shadow h-100 py-2">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                        <div class="h4 font-weight-bold text-uppercase mb-1">
+                            建議罰金</div>
+                        <div class="h3 mb-0 font-weight-bold text-gray-800">${{ predict }}</div>
+                    </div>
+                    <div class="col-auto">
+                      <img src="../static/img/money.png" width="75" height="75" class="me-3">
+                    </div>
+                </div>
+            </div>
+        </div>
+      </div>
+    </div>
+ 
+    <form class="row g-3 needs-validation" novalidate method="post" action="/predict/insult" enctype="multipart/form-data">
+        <div class="container">
+            <div class="row row-cols-1 row-cols-lg-3 align-items-stretch g-3 py-3">
+               
+              <div class="col">
+                    <div class="h-100 p-5 bg-light border rounded-3">
+                      <h2>犯罪情境</h2>
+                      <hr class="my-6">
+                      <div class="col-md-10"> 
+                        <label  class="form-label">侮辱內容 </label>
+                        <a href="#insult" data-bs-toggle="tooltip" data-bs-placement="right" title="請點擊參考侮辱內容介紹">
+                          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-exclamation-circle-fill" viewBox="0 0 16 16">
+                            <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8 4a.905.905 0 0 0-.9.995l.35 3.507a.552.552 0 0 0 1.1 0l.35-3.507A.905.905 0 0 0 8 4zm.002 6a1 1 0 1 0 0 2 1 1 0 0 0 0-2z"/>
+                          </svg>
+                        </a>
+                        <select class="form-select" id="content" name="xword" required>
+                          <option selected disabled value="">請選擇</option>
+                          <option value= '0'>人格侮辱
+                          <!-- <option value= '1'>動作侮辱 -->
+                          <option value= '2'>動物侮辱
+                          <option value= '3'>器官侮辱
+                          <option value= '4'>國罵侮辱
+                          <option value= '5'>連續國罵侮辱
+                          <option value= '6'>形容侮辱
+                          <option value= '7'>敘述侮辱
+                          <option value= '8'>泛詞侮辱
+                          <option value= '9'>精神侮辱
+                          <option value= '10'>蕩婦侮辱
+                        </select>
+                        <div class="invalid-feedback">
+                          請填寫這個欄位。
+                        </div>
+                      </div>
+                      <hr class="my-6">
+                      <div class="col-md-10"> 
+                        <label  class="form-label">法院類型</label>
+                        <select class="form-select" id="content" name="court" required>
+                          <option selected disabled value="">請選擇</option>
+                          <option value= '2'>最高法院
+                          <option value= '2'>高等法院
+                          <option value= '1'>基隆地方法院
+                          <option value= '0'>臺北地方法院
+                          <option value= '0'>新北地方法院
+                          <option value= '0'>桃園地方法院
+                          <option value= '1'>新竹地方法院
+                          <option value= '1'>苗栗地方法院
+                          <option value= '0'>臺中地方法院
+                          <option value= '1'>彰化地方法院
+                          <option value= '1'>南投地方法院
+                          <option value= '2'>雲林地方法院
+                          <option value= '1'>嘉義地方法院
+                          <option value= '0'>臺南地方法院
+                          <option value= '0'>高雄地方法院
+                          <option value= '1'>屏東地方法院
+                          <option value= '1'>宜蘭地方法院
+                          <option value= '1'>花蓮地方法院
+                          <option value= '1'>臺東地方法院
+                          <option value= '1'>澎湖地方法院
+                          <option value= '1'>金馬地方法院
+                        </select>
+                        <div class="invalid-feedback">
+                          請填寫這個欄位。
+                        </div>
+                      </div>
+                      <hr class="my-6">
+                      <div class="col-md-8">
+                        <label  class="form-label">犯罪方式</label>
+                        <select class="form-select" id="location" name="place" required >
+                          <option selected disabled value="">請選擇</option>
+                          <option value= '0'>實體
+                          <option value= '1'>網路
+                        </select>
+                        <div class="invalid-feedback">
+                          請填寫這個欄位。
+                        </div>
+                      </div>
+                      <hr class="my-6">
+                      <div class="col-md-10"> 
+                        <label  class="form-label">是否為簡易判決</label>
+                        <a data-bs-toggle="tooltip" data-bs-placement="right" title="被告人自白坦承並且法官認同">
+                          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-exclamation-circle-fill" viewBox="0 0 16 16">
+                            <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8 4a.905.905 0 0 0-.9.995l.35 3.507a.552.552 0 0 0 1.1 0l.35-3.507A.905.905 0 0 0 8 4zm.002 6a1 1 0 1 0 0 2 1 1 0 0 0 0-2z"/>
+                          </svg>
+                        </a>
+                        <select class="form-select" id="content" name="simplejudge" required>
+                          <option selected disabled value="">請選擇</option>
+                          <option value= '0'>簡易判決
+                          <option value= '1'>非簡易判決
+                        </select>
+                        <div class="invalid-feedback">
+                          請填寫這個欄位。
+                        </div>
+                      </div>
+                    </div>
+              </div>
+              <div class="col">
+                  <div class="h-100 p-5 bg-light border rounded-3">
+                    <h2>犯罪後之態度</h2>
+                      <hr class="my-6">
+                      <div class="col-md-4">
+                        <label for="validationDefault04" class="form-label">犯後態度</label>
+                        <select class="form-select" id="validationDefault04" name="attitude" required>
+                          <option selected disabled value="">請選擇</option>
+                          <option value= '0'>不佳
+                          <option value= '2'>尚可
+                          <option value= '3'>良好
+                        </select>
+                        <div class="invalid-feedback">
+                          請填寫這個欄位。
+                        </div>
+                      </div>
+                      <hr class="my-6">
+                      <div class="col-md-6">
+                        <label for="validationDefault04" class="form-label">是否坦承</label>
+                        <select class="form-select" id="validationDefault04" name="confess" required>
+                          <option selected disabled value="">請選擇</option>
+                          <option value= '0'>矢口否認
+                            <option value= '0'>部分坦承
+                          <option value= '1'>坦承不諱
+                        </select>
+                        <div class="invalid-feedback">
+                          請填寫這個欄位。
+                        </div>
+                      </div>
+                      <hr class="my-6">
+                      <h6 class="mb-3">是否接續犯</h6>
+                      <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="sequel" id="inlineRadio1" value="1" required>
+                        <label class="form-check-label" for="inlineRadio1">是</label>
+                      </div>
+                      <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="sequel" id="inlineRadio2" value="0" required>
+                        <label class="form-check-label" for="inlineRadio2">否</label>
+                      </div>
+                  </div>
+              </div>
+              <div class="col">
+                    <div class="h-100 p-5 bg-light border rounded-3">
+                      <h2>犯罪行為人之狀態</h2>
+                      <hr class="my-4">
+                      <h6 class="mb-3">是否有前科</h6>
+                      <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="record" id="record" value="1" required>
+                        <label class="form-check-label">是</label>
+                      </div>
+                      <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="record" id="record" value="0" required>
+                        <label class="form-check-label">否</label>
+                      </div>
+                      <hr class="my-4">
+                      <div class="col-md-8">
+                        <label for="validationDefault04" class="form-label">教育程度</label>
+                        <select class="form-select" id="validationDefault04" name="education" required>
+                          <option selected disabled value="">請選擇</option>
+                          <option value= '0'>國中以下
+                          <option value= '2'>高中職
+                          <option value= '1'>大專院校以上
+                        </select>
+                        <div class="invalid-feedback">
+                          請填寫這個欄位。
+                        </div>
+                      </div>
+                      <hr class="my-6">
+                      <div class="col-md-8">
+                        <label for="validationDefault04" class="form-label">經濟狀態</label>
+                        <select class="form-select" id="validationDefault04" name="financial" required>
+                          <option selected disabled value="">請選擇</option>
+                          <option value= '0'>不佳
+                          <option value= '2'>正常
+                          <option value= '1'>小康以上
+                        </select>
+                        <div class="invalid-feedback">
+                          請填寫這個欄位。
+                        </div>
+                      </div>
+                      
+              </div>
+            </div>      
+        </div>    
+        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+          <button type="submit" class="btn btn-outline-secondary my-2">Submit</button>
+          <div class="vr"></div>
+          <a href="https://ateam-judgement-prediction.herokuapp.com/predict" class="btn btn-outline-danger my-2">Reset</a>
+        </div>
+    </form>
+    <script>
+      // Example starter JavaScript for disabling form submissions if there are invalid fields
+      (function () {
+        'use strict'
+
+  // Fetch all the forms we want to apply custom Bootstrap validation styles to
+        var forms = document.querySelectorAll('.needs-validation')
+
+  // Loop over them and prevent submission
+        Array.prototype.slice.call(forms)
+          .forEach(function (form) {
+             form.addEventListener('submit', function (event) {
+               if (!form.checkValidity()) {
+                event.preventDefault()
+                event.stopPropagation()
+              }
+
+              form.classList.add('was-validated')
+            }, false)
+          })
+       })()
+    </script>
+</div>
+<div class="container px-4 py-5" id="insult">
+  <h2 class="page-section-heading text-center text-uppercase text-secondary mb-0">侮辱內容介紹</h2>
+  <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4 py-5">
+    <div class="col">
+      <div class="card shadow-sm" style="width: 18rem;">
+        <img src="../static/img/人格侮辱.png" class="card-img-top " alt="人格侮辱">
+        <div class="card-body">
+          <h5 class="card-title fw-bold">人格侮辱</h5>
+          <p class="card-text">對告訴人進行道德/人格上的侮蔑</p>
+        </div>
+      </div>
+    </div>
+    <div class="col">
+      <div class="card shadow-sm" style="width: 18rem;">
+        <img src="../static/img/形容侮辱.png" class="card-img-top " alt="形容侮辱">
+        <div class="card-body">
+          <h5 class="card-title fw-bold">形容侮辱</h5>
+          <p class="card-text">以譬喻法類的貶損詞侮辱告訴人</p>
+        </div>
+      </div>
+    </div>
+    <div class="col">
+      <div class="card shadow-sm" style="width: 18rem;">
+        <img src="../static/img/泛詞侮辱.png" class="card-img-top " alt="泛詞侮辱">
+        <div class="card-body">
+          <h5 class="card-title fw-bold">泛詞侮辱</h5>
+          <p class="card-text">俗語類別的貶損詞侮辱告訴人</p>
+        </div>
+      </div>
+    </div>
+    <div class="col">
+      <div class="card shadow-sm" style="width: 18rem;">
+        <img src="../static/img/器官侮辱.png" class="card-img-top " alt="器官侮辱">
+        <div class="card-body">
+          <h5 class="card-title fw-bold">器官侮辱</h5>
+          <p class="card-text">以身體部位對告訴人進行貶損</p>
+        </div>
+      </div>
+    </div>
+    <div class="col">
+      <div class="card shadow-sm" style="width: 18rem;">
+        <img src="../static/img/動物侮辱.png" class="card-img-top " alt="動物侮辱">
+        <div class="card-body">
+          <h5 class="card-title fw-bold">動物侮辱</h5>
+          <p class="card-text">使用動物對告訴人進行負面類比</p>
+        </div>
+      </div>
+    </div>
+    <div class="col">
+      <div class="card shadow-sm" style="width: 18rem;">
+        <img src="../static/img/敘述侮辱.png" class="card-img-top " alt="敘述侮辱">
+        <div class="card-body">
+          <h5 class="card-title fw-bold">敘述侮辱</h5>
+          <p class="card-text">以不實行為/情境對告訴人進行侮蔑</p>
+        </div>
+      </div>
+    </div>
+    <div class="col">
+      <div class="card shadow-sm" style="width: 18rem;">
+        <img src="../static/img/精神侮辱.png" class="card-img-top " alt="精神侮辱">
+        <div class="card-body">
+          <h5 class="card-title fw-bold">精神侮辱</h5>
+          <p class="card-text">針對告訴人智能上的貶損</p>
+        </div>
+      </div>
+    </div>
+    <div class="col">
+      <div class="card shadow-sm" style="width: 18rem;">
+        <img src="../static/img/國罵.png" class="card-img-top " alt="國罵侮辱">
+        <div class="card-body">
+          <h5 class="card-title fw-bold">國罵侮辱</h5>
+          <p class="card-text">辱罵性質為國罵系列的粗口用語</p>
+        </div>
+      </div>
+    </div>
+    <div class="col">
+      <div class="card shadow-sm" style="width: 18rem;">
+        <img src="../static/img/連續國罵.png" class="card-img-top " alt="連續性國罵侮辱">
+        <div class="card-body">
+          <h5 class="card-title fw-bold">連續性國罵侮辱</h5>
+          <p class="card-text">國罵系列開頭為主的粗口用語</p>
+        </div>
+      </div>
+    </div>
+    <div class="col">
+      <div class="card shadow-sm" style="width: 18rem;">
+        <img src="../static/img/蕩婦侮辱.png" class="card-img-top " alt="蕩婦侮辱">
+        <div class="card-body">
+          <h5 class="card-title fw-bold">蕩婦侮辱</h5>
+          <p class="card-text">對告訴人進行感情/性關係上的侮蔑</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock page_content %}

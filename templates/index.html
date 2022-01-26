@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% block title %}首頁 | Judgement-Prediction{% endblock title %}
+{% block page_content %}
+
+  <div id="carouselExampleCaptions" class="carousel slide" data-bs-ride="carousel">
+    <div class="carousel-indicators">
+      <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+      <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="1" aria-label="Slide 2"></button>
+    </div>
+    <div class="carousel-inner">
+      <div class="carousel-item active">
+        <a href="https://ateam-judgement-prediction.herokuapp.com/predict" target="_blank">
+          <img src="../static/img/predict.png" class="d-block w-100" alt="判決預測">
+         </a>
+      </div>
+      <div class="carousel-item">
+        <a href="https://ateam-judgement-prediction.herokuapp.com/member" target="_blank">
+         <img src="../static/img/member.png" class="d-block w-100" alt="團隊">
+        </a>
+        <div class="carousel-caption d-none d-md-block">
+        </div>
+      </div>
+    </div>
+    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="prev">
+      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Previous</span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="next">
+      <span class="carousel-control-next-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Next</span>
+    </button>
+  </div>
+</div>
+
+  
+    <div class="container col-xxl-8 px-4 py-5">
+      <div class="row flex-lg-row-reverse align-items-center g-5 py-5">
+        <div class="col-10 col-sm-8 col-lg-6">
+          <div class="flourish-embed flourish-bar-chart-race" data-src="visualisation/8312593">
+            <script src="https://public.flourish.studio/resources/embed.js"></script>
+          </div>
+        </div>
+        <div class="col-lg-6">
+          <h1 class="display-5 fw-bold lh-1 mb-3">專題介紹與展望</h1>
+          <p class="h5 lead" style="text-indent: 2em">本站含括近十年來台灣刑法妨礙名譽（誹謗，公然侮辱）的資料統計整理，並且針對已成立的妨害名譽罪判決書進行分類和特徵工程，利用AI機器學習預測各種犯案情境下所對應的罰金。原需瀏覽成千上萬的法律案件記錄，實際上可以在短短幾秒鐘內就可提供最佳的預測結果。
+
+            AI人工智慧具有自動更新、分析、思考、預測功能，同時也為司法系統帶來一套嶄新技術發明，將用於客觀公平判決，排除人為情感及主觀因素。人工智慧將機器學習的概念帶入了我們的現實世界，以預測法律案件中法官的判決。未來將擁有人工
+            
+            智慧結合法律事務的詳細知識，準確預測判斷，讓整個司法系統更加有效率。</p>
+        </div>
+      </div>
+    </div>
+{% endblock page_content %}

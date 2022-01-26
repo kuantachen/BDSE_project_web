@@ -1,0 +1,869 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script type="text/javascript" src="../static/scripts/d3/d3.min.js"></script>
+    <title>儀表板 | Judgement-Prediction</title>
+    <link rel="stylesheet" href="../static/bootstrap-5.1.3-dist/css/bootstrap.css">
+    <script src="../static/bootstrap-5.1.3-dist/js/bootstrap.js"></script>
+    <style type="text/css">
+
+        .axis text {
+            font: 12px;
+        }
+
+        .axis path,
+        .axis line {
+            fill: none;
+            stroke: rgb(219, 57, 57);
+            opacity: 0;
+            stroke-width: 2px;
+        }
+    </style>
+</head>
+
+<body>
+    {% include "_header.html" %}
+
+
+  <div class="container">
+    <div class="col-lg-9 mx-auto py-4">
+        <button name='button' class="btn btn-outline-secondary" id="TWN" value="TWN">台灣</button>
+        <!-- <button name='button' class="btn" id="HCJ" value="HCJ">高等</button> -->
+        <button name='button' class="btn btn-outline-secondary" id="TPE" value="TPE">台北</button>
+        <button name='button' class="btn btn-outline-secondary" id="NTP" value="NTP">新北</button>
+        <button name='button' class="btn btn-outline-secondary" id="KLU" value="KLU">基隆</button>
+        <button name='button' class="btn btn-outline-secondary" id="HSH" value="HSH">新竹</button>
+        <!-- <button name='button' class="btn" id="MAL" value="MAL">苗栗</button> -->
+        <button name='button' class="btn btn-outline-secondary" id="TXG" value="TXG">台中</button>
+        <button name='button' class="btn btn-outline-secondary" id="CWH" value="CWH">彰化</button>
+        <button name='button' class="btn btn-outline-secondary" id="NTO" value="NTO">南投</button>
+        <button name='button' class="btn btn-outline-secondary" id="YLH" value="YLH">雲林</button>
+        <!-- <button name='button' class="btn" id="CHY" value="CHY">嘉義</button> -->
+        <button name='button' class="btn btn-outline-secondary" id="TNN" value="TNN">台南</button>
+        <button name='button' class="btn btn-outline-secondary" id="KHH" value="KHH">高雄</button>
+        <button name='button' class="btn btn-outline-secondary" id="IUH" value="IUH">屏東</button>
+        <button name='button' class="btn btn-outline-secondary" id="ILN" value="ILN">宜蘭</button>
+        <button name='button' class="btn btn-outline-secondary" id="HWA" value="HWA">花蓮</button>
+        <button name='button' class="btn btn-outline-secondary" id="TTT" value="TTT">台東</button>
+        <!-- <button name='button' class="btn" id="PEH" value="PEH">澎湖</button> -->
+        <!-- <button name='button' class="btn" id="KMN" value="KMN">金馬</button> -->
+    </div>
+  </div>
+    <div class="d-md-flex flex-md-equal w-100 my-md-3 ps-md-3">
+      <div class="top container px-4 py-5" style="width:fit-content"></div>
+    </div>
+    <div class="d-md-flex flex-md-equal w-100 my-md-3 ps-md-3"></div>
+      <div class="bottom container px-4 py-5" style="width:fit-content"></div>
+    </div>
+    <script type="text/javascript">
+        //ratioDataset
+        var Pay = ['妨害名譽', '誹謗']
+        var ILN_Pay = [9292, 41786]
+        var HWA_Pay = [9430, 31038]
+        var KMN_Pay = [12000, 20500]
+        var NTO_Pay = [11898, 26667]
+        var IUH_Pay = [14632, 32808]
+        var MAL_Pay = [17500, 40000]
+        var HCJ_Pay = [11148, 36325]
+        var KHH_Pay = [11132, 34429]
+        var KLU_Pay = [11159, 36353]
+        var YLH_Pay = [11639, 35313]
+        var NTP_Pay = [11050, 36962]
+        var HSH_Pay = [10744, 31122]
+        var CHY_Pay = [16000, 10000]
+        var CWH_Pay = [8457, 31684]
+        var TXG_Pay = [9970, 32000]
+        var TPE_Pay = [10484, 35386]
+        var TTT_Pay = [8558, 20000]
+        var TNN_Pay = [9667, 29222]
+        var PEH_Pay = [16500, 15000]
+        var TWN_Pay = [10815, 34822]
+        //rankDataset
+        // var TPE_Rank = ['幹你娘', '幹', '不要臉', '垃圾', '虛偽']
+        // var IUH_Rank = ['幹你娘', '幹', '不要臉', '垃圾', '他媽的']
+        // var NTP_Rank = ['幹你娘', '幹', '不要臉', '垃圾', '狗']
+        // var KHH_Rank = ['幹你娘', '幹', '不要臉', '垃圾', '狗']
+        // var KLU_Rank = ['幹你娘', '幹', '不要臉', '垃圾', '髒']
+        // var HWA_Rank = ['幹你娘', '不要臉', '幹', '詐欺', '狗']
+        // var CHY_Rank = ['幹你娘', '不要臉', '幹', '瘋子', '垃圾']
+        // var TNN_Rank = ['幹你娘', '幹', '不要臉', '垃圾', '討客兄']
+        // var HCJ_Rank = ['幹你娘', '幹', '不要臉', '垃圾', '詐欺']
+        // var TXG_Rank = ['幹你娘', '幹', '不要臉', '垃圾', '詐欺']
+        // var YLH_Rank = ['幹你娘', '幹', '不要臉', '垃圾', '幹你娘機掰']
+        // var MAL_Rank = ['不要臉', '狗', '幹你娘', '幹', '惡劣']
+        // var ILN_Rank = ['幹你娘', '不要臉', '幹', '髒', '垃圾']
+        // var HSH_Rank = ['幹你娘', '幹', '垃圾', '不要臉', '髒']
+        // var TTT_Rank = ['幹你娘', '幹', '不要臉', '垃圾', '幹你娘機掰']
+        // var CWH_Rank = ['幹你娘', '不要臉', '幹', '狗', '畜生']
+        // var NTO_Rank = ['幹你娘', '幹', '不要臉', '幹你娘機掰', '狗']
+        // var PEH_Rank = ['幹你娘', '不知悔改', '垃圾', '王八蛋', '不正常男女關係']
+        // var KMN_Rank = ['幹你娘', '垃圾', '幹', '你娘老雞巴', '髒']
+        // var TWN_Rank = ['幹你娘', '幹', '不要臉', '垃圾', '狗']
+        var TPE_Rank = ['垃圾', '虛偽','狗']
+        var IUH_Rank = ['垃圾', '他媽的','賤']
+        var NTP_Rank = ['垃圾', '狗','虛偽']
+        var KHH_Rank = ['垃圾', '狗','虛偽']
+        var KLU_Rank = ['垃圾', '髒','賤']
+        var HWA_Rank = ['狗','垃圾','媽的']
+        // var CHY_Rank = ['瘋子', '垃圾',]
+        var TNN_Rank = ['垃圾','瘋女人', '討客兄',]
+        // var HCJ_Rank = ['垃圾', '詐欺',]
+        var TXG_Rank = ['垃圾', '虛偽','神經病']
+        var YLH_Rank = ['幹你娘機掰','垃圾', '虛偽']
+        // var MAL_Rank = ['狗', '惡劣',]
+        var ILN_Rank = ['垃圾','髒', '狗']
+        var HSH_Rank = ['垃圾', '髒','虛偽']
+        var TTT_Rank = ['垃圾', '幹你娘機掰','王八蛋']
+        var CWH_Rank = ['狗', '畜生','垃圾']
+        var NTO_Rank = ['幹你娘機掰', '狗','瘋女人']
+        // var PEH_Rank = ['不知悔改', '垃圾', '王八蛋']
+        // var KMN_Rank = ['垃圾', '你娘老雞巴', '髒']
+        var TWN_Rank = ['幹你娘', '幹', '不要臉']
+        //payDataset
+        var Crime = ['妨害名譽', '誹謗']
+        var ILN_Ratio = [48, 28]
+        var HWA_Ratio = [64, 26]
+        var KMN_Ratio = [7, 2]
+        var NTO_Ratio = [49, 12]
+        var IUH_Ratio = [68, 26]
+        var MAL_Ratio = [2, 2]
+        var HCJ_Ratio = [487, 191]
+        var KHH_Ratio = [393, 168]
+        var KLU_Ratio = [44, 17]
+        var YLH_Ratio = [61, 16]
+        var NTP_Ratio = [762, 291]
+        var HSH_Ratio = [121, 41]
+        var CHY_Ratio = [3, 1]
+        var CWH_Ratio = [35, 19]
+        var TXG_Ratio = [385, 158]
+        var TPE_Ratio = [606, 220]
+        var TTT_Ratio = [43, 6]
+        var TNN_Ratio = [18, 9]
+        var PEH_Ratio = [2, 3]
+        var TWN_Ratio = [3200, 1238]
+        //trendDataset
+        var year = ['2000', '2001', '2002', '2003', '2004', '2005', '2006', '2007', '2008', '2009', '2010', '2011', '2012', '2013', '2014', '2015', '2016', '2017', '2018', '2019', '2020', '2021']
+        var CHY_Trend = [6, 8, 8, 9, 14, 15, 14, 11, 5, 13, 13, 28, 4, 16, 4, 1, 3, 5, 0, 0, 1, 1]
+        var CWH_Trend = [0, 3, 3, 2, 4, 3, 1, 5, 8, 16, 11, 20, 15, 7, 13, 11, 3, 16, 4, 12, 19, 31]
+        var HCJ_Trend = [1, 1, 3, 1, 2, 1, 2, 2, 0, 1, 1, 1, 5, 3, 0, 1, 1, 0, 0, 1, 0, 0]
+        var HSH_Trend = [3, 5, 2, 6, 1, 2, 11, 13, 14, 11, 18, 29, 31, 22, 21, 27, 33, 36, 42, 38, 47, 50]
+        var HWA_Trend = [1, 1, 1, 1, 0, 5, 16, 9, 7, 10, 17, 16, 15, 13, 18, 22, 18, 15, 21, 27, 14, 12]
+        var ILN_Trend = [1, 1, 2, 0, 0, 0, 0, 1, 3, 7, 15, 13, 8, 17, 11, 9, 17, 25, 22, 17, 42, 18]
+        var IUH_Trend = [7, 4, 4, 6, 7, 4, 8, 14, 14, 21, 22, 26, 22, 15, 14, 19, 11, 23, 40, 32, 28, 38]
+        var KHH_Trend = [22, 13, 19, 28, 26, 32, 50, 54, 51, 90, 100, 92, 133, 134, 113, 105, 101, 141, 154, 157, 174, 184]
+        var KLU_Trend = [8, 12, 4, 5, 7, 8, 3, 10, 2, 4, 0, 1, 15, 24, 5, 19, 30, 36, 22, 6, 7, 3]
+        var MAL_Trend = [3, 4, 3, 3, 1, 1, 6, 6, 4, 7, 3, 10, 14, 10, 8, 16, 3, 1, 1, 1, 0, 2]
+        var NTO_Trend = [2, 1, 9, 7, 5, 4, 6, 7, 3, 9, 8, 12, 12, 9, 11, 15, 10, 12, 13, 17, 12, 22]
+        var NTP_Trend = [15, 16, 13, 26, 30, 43, 61, 79, 102, 73, 120, 144, 153, 134, 132, 144, 181, 173, 180, 179, 217, 169]
+        var PEH_Trend = [0, 0, 1, 0, 1, 1, 0, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 1]
+        var TNN_Trend = [17, 6, 8, 5, 12, 16, 27, 35, 28, 28, 60, 37, 23, 3, 3, 9, 24, 8, 7, 13, 5, 7]
+        var TPE_Trend = [17, 8, 19, 30, 35, 35, 46, 79, 101, 118, 141, 175, 162, 146, 158, 149, 159, 198, 215, 262, 273, 274]
+        var TTT_Trend = [1, 2, 1, 2, 3, 1, 3, 6, 3, 4, 8, 2, 4, 5, 9, 12, 3, 7, 8, 12, 8, 12]
+        var TXG_Trend = [6, 9, 12, 6, 7, 15, 34, 34, 49, 59, 69, 88, 96, 83, 75, 88, 108, 146, 168, 180, 216, 154]
+        var YLH_Trend = [1, 2, 0, 0, 1, 0, 1, 1, 0, 0, 3, 7, 3, 7, 7, 16, 11, 17, 17, 13, 25, 26]
+        var TWN_Trend = [111, 96, 112, 137, 156, 186, 289, 368, 396, 471, 609, 701, 715, 648, 602, 663, 716, 859, 914, 969, 1088, 1004]
+        var KMN_Trend = [2, 0, 0, 0, 0, 1, 0, 0, 2, 1, 1, 0, 3, 1, 0, 1, 0, 2, 0, 2, 1, 1]
+
+        //按鈕事件
+        var btn = document.getElementsByTagName("button");
+        var Pay = TWN_Pay
+        var Rank = TWN_Rank
+        var yearTrend = TWN_Trend
+        var Ratio = TWN_Ratio
+        var color = d3.scale.ordinal()
+            .range(["#FFD382", "#BD7B00"]);
+
+        var body = d3.select('.top');
+        // 髒話
+        var svg3 = body.append('svg').attr('width', '500px').attr('height', '200px');
+        svg3.append("text")
+            .text("區域三大髒話")
+            .attr("x", 0)
+            .attr("y", 25)
+            .attr("font-size", 20)
+        svg3.append("text")
+            .text('1. ' + Rank[0])
+            .attr("x", 5)
+            .attr("y", 100)
+            .attr("font-size", 25)
+        svg3.append("text")
+            .text('2. ' + Rank[1])
+            .attr("x", 170)
+            .attr("y", 100)
+            .attr("font-size", 25)
+        svg3.append("text")
+            .text('3. ' + Rank[2])
+            .attr("x", 340)
+            .attr("y", 100)
+            .attr("font-size", 25)
+
+        // Pay     
+        var linear = d3.scale.linear()
+            .domain([0, 45000])
+            .range([0, 250]);
+        var rectHeight = 50;
+        var svg2 = body.append("svg")
+            .attr("width", '300px')
+            .attr("height", '200px')
+            .append("g")
+            .attr("transform", "translate(0,50)")
+            
+            ;
+
+        svg2.selectAll("rect")
+            .data(Pay)
+            .enter()
+            .append("rect")
+            .attr("x", 10)
+            .attr("y", function (d, i) {
+                return i * (rectHeight + 5);
+            })
+            .attr("width", 0)
+            .transition()
+            .delay(100)
+            .duration(500)
+            .attr("width", function (d) {
+                return linear(d);
+            })
+            .attr("height", rectHeight)
+            .attr("fill", "steelblue")
+            .style("fill", function (d) { return color(d) })
+        // .attr("opacity", 0.4);
+
+        svg2.selectAll('text')
+            .data(Pay)
+            .enter()
+            .append('text')
+            .attr("x", function (d) {
+                return linear(d) + 13;
+            })
+            .attr("y", function (d, i) {
+                return 30 + i * (rectHeight + 5);
+            })
+            .text(function (d) {
+                var _comma = d3.format(',')
+                return _comma(d) + '元'
+            })
+            .attr("font-size", 14)
+
+        svg2.append("text")
+            .text("五年平均罰款")
+            .attr("x", 0)
+            .attr("y", -25)
+            .attr("font-size", 20)
+
+        var size = 18
+
+        svg2.selectAll("mydots")
+            .data(Crime)
+            .enter()
+            .append("rect")
+            .attr("x", 200)
+            .attr("y", function (d, i) { return -25 + i * (size + 5) }) // 100 is where the first dot appears. 25 is the distance between dots
+            .attr("width", size)
+            .attr("height", size)
+            .style("fill", function (d) { return color(d) })
+
+        // Add one dot in the legend for each name.
+        svg2.selectAll("mylabels")
+            .data(Crime)
+            .enter()
+            .append("text")
+            .attr("x", 200 + size * 1.2)
+            .attr("y", function (d, i) { return -25 + i * (size + 5) + (size / 2) }) // 100 is where the first dot appears. 25 is the distance between dots
+            .style("fill", 'black')
+            .text(function (d) { return d })
+            .attr("text-anchor", "left")
+            .style("alignment-baseline", "middle")
+
+        body = d3.select('.bottom');
+        // yearTrend
+        var xScale = d3.scale.linear()
+            .domain([0, year.length])
+            .range([0, 440])
+        var xScale2 = d3.scale.linear()
+            .domain([2000, 2022])
+            .range([0, 440])
+        var yScale = d3.scale.linear()
+            .domain([0, d3.max(yearTrend)])
+            .range([0, 300])
+        var yScale2 = d3.scale.linear()
+            .domain([0, d3.max(yearTrend)])
+            .range([300, 0])
+        var xAxis = d3.svg.axis()
+            .scale(xScale2)
+            .orient('bottom')
+            .ticks(yearTrend.length).tickFormat(d3.format("d"))
+            .tickValues(year);
+        var yAxis = d3.svg.axis()
+            .scale(yScale2)
+            .orient('left')
+            .ticks(5);
+        var color1 = d3.scale.category20b();
+        var svg = body.append('svg').attr('width', '500px').attr('height', '350px')
+
+        svg.selectAll('rect')
+            .data(yearTrend)
+            .enter()
+            .append('rect')
+            .attr({
+                x: function (d, i) {
+                    return 10 + xScale(i) + 'px';
+                },
+                y: 330,
+
+                width: xScale(1) + 'px',
+                height: 0
+            })
+            .transition()
+            .delay(100)
+            .duration(500)
+            .attr({
+                x: function (d, i) {
+                    return 10 + xScale(i) + 'px';
+                },
+                y: function (d, i) {
+                    return 330 - yScale(d) + 'px';
+                },
+                width: xScale(1) + 'px',
+                height: function (d) {
+                    return yScale(d) + 'px';
+                }
+            })
+            .style('fill', function (d, i) { return color1(i) })
+            ;
+
+        svg.selectAll('text')
+            .data(yearTrend)
+            .enter()
+            .append('text')
+            .text(function (d) {
+                return d;
+            })
+            .attr({
+
+                x: function (d, i) {
+                    return 10 + xScale(i) + xScale(1) / 2;
+                },
+                y: function (d, i) {
+                    return 320 - yScale(d) + 'px'
+                }
+            })
+            .style('fill', 'black')
+            .style('text-anchor', 'middle')
+            .attr("font-size", 11);
+        svg.append("text")
+            .text("歷年罰款案件數")
+            .attr("x", 0)
+            .attr("y", 25)
+            .attr("font-size", 20)
+        var g = svg.append('g')
+            .attr('transform', 'translate(35,20)');
+        g.append('g')
+            .attr('class', 'axis')
+            .attr('transform', 'translate(33,440)')
+            .call(xAxis);
+
+        // Ratio
+        var svg1 = body.append("svg")
+            .attr("width", '300px')
+            .attr("height", '350px')
+            .append("g")
+            .attr("transform", "translate(150,175)")
+            ;
+
+
+        var arc1 = d3.svg.arc()
+            //設定內、外圓形的半徑大小
+            .outerRadius(80)
+            .innerRadius(30);
+
+        //建立一個layout pie物件，無排序
+        var pie = d3.layout.pie()
+            .sort(null);
+
+        var g1 = svg1.selectAll("g")
+            .data(pie(Ratio))
+            .enter()
+            .append("g")
+            //實際畫圓的方式是以SVG圖形路徑（Path）來繪製
+            .append("path")
+            //路徑的部份要設定在d屬性中，所以套入arc1函數，
+            //d3.js會依據資料配合arc1函數產出Path所需的路徑
+            .attr("d", arc1)
+            .style("fill", function (d) {
+                return color(d.data);
+            });
+
+        svg1.selectAll("text")
+            .data(pie(Ratio))
+            .enter()
+            .append("text")
+            .attr("transform", function (d) {
+                var x = arc1.centroid(d)[0]
+                var y = arc1.centroid(d)[1]
+                return "translate(" + x + "," + y + ")"
+            })
+            .attr("text-anchor", "middle")
+            .text(function (d, i) {
+                return (Ratio[i] / d3.sum(Ratio) * 100).toFixed(0) + "%";
+            })
+
+        svg1.append("text")
+            .text("妨害名譽及誹謗比例")
+            .attr("x", -150)
+            .attr("y", -150)
+            .attr("font-size", 20)
+
+        var size = 18
+
+        svg1.selectAll("mydots")
+            .data(Crime)
+            .enter()
+            .append("rect")
+            .attr("x", 50)
+            .attr("y", function (d, i) { return -125 + i * (size + 5) }) // 100 is where the first dot appears. 25 is the distance between dots
+            .attr("width", size)
+            .attr("height", size)
+            .style("fill", function (d) { return color(d) })
+
+        // Add one dot in the legend for each name.
+        svg1.selectAll("mylabels")
+            .data(Crime)
+            .enter()
+            .append("text")
+            .attr("x", 50 + size * 1.2)
+            .attr("y", function (d, i) { return -125 + i * (size + 5) + (size / 2) }) // 100 is where the first dot appears. 25 is the distance between dots
+            .style("fill", 'black')
+            .text(function (d) { return d })
+            .attr("text-anchor", "left")
+            .style("alignment-baseline", "middle")
+
+
+        document.body.onclick = function (event) {
+            // console.log(TWN);
+            var id = event.target.id;
+            console.log(id);
+            switch (id) {
+                case "TWN":
+                    Pay = TWN_Pay
+                    Rank = TWN_Rank
+                    yearTrend = TWN_Trend
+                    Ratio = TWN_Ratio
+                    d3.selectAll('svg').remove()
+                    break;
+                case "KLU":
+                    Pay = KLU_Pay
+                    Rank = KLU_Rank
+                    yearTrend = KLU_Trend
+                    Ratio = KLU_Ratio
+                    d3.selectAll('svg').remove()
+                    break;
+                case "NTP":
+                    Pay = NTP_Pay
+                    Rank = NTP_Rank
+                    yearTrend = NTP_Trend
+                    Ratio = NTP_Ratio
+                    d3.selectAll('svg').remove()
+                    break;
+                case "TPE":
+                    Pay = TPE_Pay
+                    Rank = TPE_Rank
+                    yearTrend = TPE_Trend
+                    Ratio = TPE_Ratio
+                    d3.selectAll('svg').remove()
+                    break;
+                case "HSH":
+                    Pay = HSH_Pay
+                    Rank = HSH_Rank
+                    yearTrend = HSH_Trend
+                    Ratio = HSH_Ratio
+                    d3.selectAll('svg').remove()
+                    break;
+                case "MAL":
+                    Pay = MAL_Pay
+                    Rank = MAL_Rank
+                    yearTrend = MAL_Trend
+                    Ratio = MAL_Ratio
+                    d3.selectAll('svg').remove()
+                    break;
+                case "TXG":
+                    Pay = TXG_Pay
+                    Rank = TXG_Rank
+                    yearTrend = TXG_Trend
+                    Ratio = TXG_Ratio
+                    d3.selectAll('svg').remove()
+                    break;
+                case "CWH":
+                    Pay = CWH_Pay
+                    Rank = CWH_Rank
+                    yearTrend = CWH_Trend
+                    Ratio = CWH_Ratio
+                    d3.selectAll('svg').remove()
+                    break;
+                case "NTO":
+                    Pay = NTO_Pay
+                    Rank = NTO_Rank
+                    yearTrend = NTO_Trend
+                    Ratio = NTO_Ratio
+                    d3.selectAll('svg').remove()
+                    break;
+                case "YLH":
+                    Pay = YLH_Pay
+                    Rank = YLH_Rank
+                    yearTrend = YLH_Trend
+                    Ratio = YLH_Ratio
+                    d3.selectAll('svg').remove()
+                    break;
+                case "HCJ":
+                    Pay = HCJ_Pay
+                    Rank = HCJ_Rank
+                    yearTrend = HCJ_Trend
+                    Ratio = HCJ_Ratio
+                    d3.selectAll('svg').remove()
+                    break;
+                case "CHY":
+                    Pay = CHY_Pay
+                    Rank = CHY_Rank
+                    yearTrend = CHY_Trend
+                    Ratio = CHY_Ratio
+                    d3.selectAll('svg').remove()
+                    break;
+                case "TNN":
+                    Pay = TNN_Pay
+                    Rank = TNN_Rank
+                    yearTrend = TNN_Trend
+                    Ratio = TNN_Ratio
+                    d3.selectAll('svg').remove()
+                    break;
+                case "KHH":
+                    Pay = KHH_Pay
+                    Rank = KHH_Rank
+                    yearTrend = KHH_Trend
+                    Ratio = KHH_Ratio
+                    d3.selectAll('svg').remove()
+                    break;
+                case "IUH":
+                    Pay = IUH_Pay
+                    Rank = IUH_Rank
+                    yearTrend = IUH_Trend
+                    Ratio = IUH_Ratio
+                    d3.selectAll('svg').remove()
+                    break;
+                case "ILN":
+                    Pay = ILN_Pay
+                    Rank = ILN_Rank
+                    yearTrend = ILN_Trend
+                    Ratio = ILN_Ratio
+                    d3.selectAll('svg').remove()
+                    break;
+                case "HWA":
+                    Pay = HWA_Pay
+                    Rank = HWA_Rank
+                    yearTrend = HWA_Trend
+                    Ratio = HWA_Ratio
+                    d3.selectAll('svg').remove()
+                    break;
+                case "TTT":
+                    Pay = TTT_Pay
+                    Rank = TTT_Rank
+                    yearTrend = TTT_Trend
+                    Ratio = TTT_Ratio
+                    d3.selectAll('svg').remove()
+                    break;
+                case "PEH":
+                    Pay = PEH_Pay
+                    Rank = PEH_Rank
+                    yearTrend = PEH_Trend
+                    Ratio = PEH_Ratio
+                    d3.selectAll('svg').remove()
+                    break;
+                case "KMN":
+                    Pay = KMN_Pay
+                    Rank = KMN_Rank
+                    yearTrend = KMN_Trend
+                    Ratio = KMN_Ratio
+                    d3.selectAll('svg').remove()
+                    break;
+                case "":
+                    d3.selectAll('svg').remove()
+                    break;
+            }
+
+            var body = d3.select('.top');
+            // 髒話
+            var svg3 = body.append('svg').attr('width', '500px').attr('height', '200px');
+            svg3.append("text")
+                .text("區域三大髒話(區域髒話已排除全台前三大髒話)")
+                .attr("x", 0)
+                .attr("y", 25)
+                .attr("font-size", 20)
+            svg3.append("text")
+                .text('1. ' + Rank[0])
+                .attr("x", 5)
+                .attr("y", 100)
+                .attr("font-size", 25)
+            svg3.append("text")
+                .text('2. ' + Rank[1])
+                .attr("x", 170)
+                .attr("y", 100)
+                .attr("font-size", 25)
+            svg3.append("text")
+                .text('3. ' + Rank[2])
+                .attr("x", 340)
+                .attr("y", 100)
+                .attr("font-size", 25)
+
+            // Pay     
+            var linear = d3.scale.linear()
+                .domain([0, 45000])
+                .range([0, 250]);
+            var rectHeight = 50;
+            var svg2 = body.append("svg")
+                .attr("width", '300px')
+                .attr("height", '200px')
+                .append("g")
+                .attr("transform", "translate(0,50)");
+
+            svg2.selectAll("rect")
+                .data(Pay)
+                .enter()
+                .append("rect")
+                .attr("x", 10)
+                .attr("y", function (d, i) {
+                    return i * (rectHeight + 5);
+                })
+                .attr("width", 0)
+                .transition()
+                .delay(100)
+                .duration(500)
+                .attr("width", function (d) {
+                    return linear(d);
+                })
+                .attr("height", rectHeight)
+                .attr("fill", "steelblue")
+                .style("fill", function (d) { return color(d) })
+            // .attr("opacity", 0.4);
+
+            svg2.selectAll('text')
+                .data(Pay)
+                .enter()
+                .append('text')
+                .attr("x", function (d) {
+                    return linear(d) + 13;
+                })
+                .attr("y", function (d, i) {
+                    return 30 + i * (rectHeight + 5);
+                })
+                .text(function (d) {
+                    var _comma = d3.format(',')
+                    return _comma(d) + '元'
+                })
+                .attr("font-size", 14)
+
+            svg2.append("text")
+                .text("五年平均罰款")
+                .attr("x", 0)
+                .attr("y", -25)
+                .attr("font-size", 20)
+
+            var size = 18
+
+            svg2.selectAll("mydots")
+                .data(Crime)
+                .enter()
+                .append("rect")
+                .attr("x", 200)
+                .attr("y", function (d, i) { return -25 + i * (size + 5) }) // 100 is where the first dot appears. 25 is the distance between dots
+                .attr("width", size)
+                .attr("height", size)
+                .style("fill", function (d) { return color(d) })
+
+            // Add one dot in the legend for each name.
+            svg2.selectAll("mylabels")
+                .data(Crime)
+                .enter()
+                .append("text")
+                .attr("x", 200 + size * 1.2)
+                .attr("y", function (d, i) { return -25 + i * (size + 5) + (size / 2) }) // 100 is where the first dot appears. 25 is the distance between dots
+                .style("fill", 'black')
+                .text(function (d) { return d })
+                .attr("text-anchor", "left")
+                .style("alignment-baseline", "middle")
+
+            body = d3.select('.bottom');
+            // yearTrend
+            var xScale = d3.scale.linear()
+                .domain([0, year.length])
+                .range([0, 440])
+            var xScale2 = d3.scale.linear()
+                .domain([2000, 2022])
+                .range([0, 440])
+            var yScale = d3.scale.linear()
+                .domain([0, d3.max(yearTrend)])
+                .range([0, 300])
+            var yScale2 = d3.scale.linear()
+                .domain([0, d3.max(yearTrend)])
+                .range([300, 0])
+            var xAxis = d3.svg.axis()
+                .scale(xScale2)
+                .orient('bottom')
+                .ticks(yearTrend.length).tickFormat(d3.format("d"))
+                .tickValues(year);
+            var yAxis = d3.svg.axis()
+                .scale(yScale2)
+                .orient('left')
+                .ticks(5);
+            var color1 = d3.scale.category20b();
+            var svg = body.append('svg').attr('width', '500px').attr('height', '350px')
+
+            svg.selectAll('rect')
+                .data(yearTrend)
+                .enter()
+                .append('rect')
+                .attr({
+                    x: function (d, i) {
+                        return 10 + xScale(i) + 'px';
+                    },
+                    y: 330,
+
+                    width: xScale(1) + 'px',
+                    height: 0
+                })
+                .transition()
+                .delay(100)
+                .duration(500)
+                .attr({
+                    x: function (d, i) {
+                        return 10 + xScale(i) + 'px';
+                    },
+                    y: function (d, i) {
+                        return 330 - yScale(d) + 'px';
+                    },
+                    width: xScale(1) + 'px',
+                    height: function (d) {
+                        return yScale(d) + 'px';
+                    }
+                })
+                .style('fill', function (d, i) { return color1(i) })
+                ;
+
+            svg.selectAll('text')
+                .data(yearTrend)
+                .enter()
+                .append('text')
+                .text(function (d) {
+                    return d;
+                })
+                .attr({
+
+                    x: function (d, i) {
+                        return 10 + xScale(i) + xScale(1) / 2;
+                    },
+                    y: function (d, i) {
+                        return 320 - yScale(d) + 'px'
+                    }
+                })
+                .style('fill', 'black')
+                .style('text-anchor', 'middle')
+                .attr("font-size", 11);
+            svg.append("text")
+                .text("歷年罰款案件數")
+                .attr("x", 0)
+                .attr("y", 25)
+                .attr("font-size", 20)
+            var g = svg.append('g')
+                .attr('transform', 'translate(35,20)');
+            g.append('g')
+                .attr('class', 'axis')
+                .attr('transform', 'translate(33,440)')
+                .call(xAxis);
+
+            // Ratio
+            var svg1 = body.append("svg")
+                .attr("width", '300px')
+                .attr("height", '350px')
+                .append("g")
+                .attr("transform", "translate(150,175)");
+
+
+            var arc1 = d3.svg.arc()
+                //設定內、外圓形的半徑大小
+                .outerRadius(80)
+                .innerRadius(30);
+
+            //建立一個layout pie物件，無排序
+            var pie = d3.layout.pie()
+                .sort(null);
+
+            var g1 = svg1.selectAll("g")
+                .data(pie(Ratio))
+                .enter()
+                .append("g")
+                //實際畫圓的方式是以SVG圖形路徑（Path）來繪製
+                .append("path")
+                //路徑的部份要設定在d屬性中，所以套入arc1函數，
+                //d3.js會依據資料配合arc1函數產出Path所需的路徑
+                .attr("d", arc1)
+                .style("fill", function (d) {
+                    return color(d.data);
+                });
+
+            svg1.selectAll("text")
+                .data(pie(Ratio))
+                .enter()
+                .append("text")
+                .attr("transform", function (d) {
+                    var x = arc1.centroid(d)[0]
+                    var y = arc1.centroid(d)[1]
+                    return "translate(" + x + "," + y + ")"
+                })
+                .attr("text-anchor", "middle")
+                .text(function (d, i) {
+                    return (Ratio[i] / d3.sum(Ratio) * 100).toFixed(0) + "%";
+                })
+
+            svg1.append("text")
+                .text("妨害名譽及誹謗比例")
+                .attr("x", -150)
+                .attr("y", -150)
+                .attr("font-size", 20)
+
+            var size = 18
+
+            svg1.selectAll("mydots")
+                .data(Crime)
+                .enter()
+                .append("rect")
+                .attr("x", 50)
+                .attr("y", function (d, i) { return -125 + i * (size + 5) }) // 100 is where the first dot appears. 25 is the distance between dots
+                .attr("width", size)
+                .attr("height", size)
+                .style("fill", function (d) { return color(d) })
+
+            // Add one dot in the legend for each name.
+            svg1.selectAll("mylabels")
+                .data(Crime)
+                .enter()
+                .append("text")
+                .attr("x", 50 + size * 1.2)
+                .attr("y", function (d, i) { return -125 + i * (size + 5) + (size / 2) }) // 100 is where the first dot appears. 25 is the distance between dots
+                .style("fill", 'black')
+                .text(function (d) { return d })
+                .attr("text-anchor", "left")
+                .style("alignment-baseline", "middle")
+
+        }
+            ;
+
+
+    </script>
+    {% include "_footer.html" %}
+
+</body>
+
+</html>
